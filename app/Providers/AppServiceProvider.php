@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Http\Resources\Json\ResourceResponse;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Pagination\Paginator;
@@ -23,6 +25,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        JsonResource::withoutWrapping(); //without 'data' in response
+
         Validator::extend('filter', function ($attribute, $value, $params) {
             return ! in_array(strtolower($value), $params);
         }, 'This name is prohibited!');
