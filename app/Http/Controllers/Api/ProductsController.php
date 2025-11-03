@@ -6,9 +6,14 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\ProductResource;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ProductsController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth:sanctum')->except(['index', 'show']);
+    }
     /**
      * Display a listing of the resource.
      */
@@ -34,6 +39,11 @@ class ProductsController extends Controller
             'price' => 'nullable|numeric|min:0',
             'compare_price' => 'nullable|numeric|gt:price',
         ]);
+        $user = $request->user();
+        if (!$user->tokenCan('products.create')){
+            abort(403, 'Unauthorized action.');
+        }
+
         $product = Product::create($request->all());
         return response()->json($product, 201);
     }
@@ -60,6 +70,12 @@ class ProductsController extends Controller
             'price' => 'nullable|numeric|min:0',
             'compare_price' => 'nullable|numeric|gt:price',
         ]);
+
+        $user = $request->user();
+        if (!$user->tokenCan('products.update')){
+            abort(403, 'Unauthorized action.');
+        }
+
         $product->update($request->all());
         return response()->json($product);
     }
@@ -69,6 +85,13 @@ class ProductsController extends Controller
      */
     public function destroy(string $id)
     {
+        $user = Auth::guard('sanctum')->user();
+        if (!$user->tokenCan('products.delete')){
+            return response([
+                'message' => 'not allowed.'
+            ],403);
+        }
+
         Product::destroy($id);
         return [
             'message' => 'Product deleted successfully'

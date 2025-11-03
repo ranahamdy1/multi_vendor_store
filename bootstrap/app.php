@@ -12,12 +12,12 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        // الميدل ويرات العامة
+        // general middleware
         $middleware->append([
             \App\Http\Middleware\MarkNotificationAsRead::class,
+            \App\Http\Middleware\CheckApiToken::class,
         ]);
 
-        // الأسماء المختصرة للميدل ويرات
         $middleware->alias([
             'auth.type' => \App\Http\Middleware\CheckUserType::class,
             'lastActive' => \App\Http\Middleware\UpdateUserLastActiveAt::class,
