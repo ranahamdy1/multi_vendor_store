@@ -4,6 +4,7 @@ use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Front\Auth\TwoFactorAuthenticationController;
 use App\Http\Controllers\Front\CartController;
 use App\Http\Controllers\Front\CheckOutController;
+use App\Http\Controllers\Front\CurrencyConverterController;
 use App\Http\Controllers\Front\HomeController;
 use App\Http\Controllers\Front\ProductsController;
 use App\Http\Controllers\ProfileController;
@@ -23,6 +24,8 @@ Route::get('checkout',[CheckOutController::class , 'create'])->name('checkout');
 Route::post('checkout',[CheckOutController::class , 'store']);
 
 Route::get('auth/user/2fa',[TwoFactorAuthenticationController::class , 'index'])->name('front.2fa');
+
+Route::get('currency',[CurrencyConverterController::class , 'store'])->name('currency.store');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

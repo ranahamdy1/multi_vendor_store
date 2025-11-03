@@ -15,7 +15,7 @@ return Application::configure(basePath: dirname(__DIR__))
         // general middleware
         $middleware->append([
             \App\Http\Middleware\MarkNotificationAsRead::class,
-            \App\Http\Middleware\CheckApiToken::class,
+           // \App\Http\Middleware\CheckApiToken::class,
         ]);
 
         $middleware->alias([
