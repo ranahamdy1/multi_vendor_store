@@ -16,14 +16,22 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->append([
             \App\Http\Middleware\MarkNotificationAsRead::class,
            // \App\Http\Middleware\CheckApiToken::class,
+           // \App\Http\Middleware\SetAppLocal::class,
         ]);
 
         $middleware->alias([
             'auth.type' => \App\Http\Middleware\CheckUserType::class,
             'lastActive' => \App\Http\Middleware\UpdateUserLastActiveAt::class,
+
+            'localize' => \Mcamara\LaravelLocalization\Middleware\LaravelLocalizationRoutes::class,
+            'localizationRedirect' => \Mcamara\LaravelLocalization\Middleware\LaravelLocalizationRedirectFilter::class,
+            'localeSessionRedirect' => \Mcamara\LaravelLocalization\Middleware\LocaleSessionRedirect::class,
+            'localeCookieRedirect' => \Mcamara\LaravelLocalization\Middleware\LocaleCookieRedirect::class,
+            'localeViewPath' => \Mcamara\LaravelLocalization\Middleware\LaravelLocalizationViewPath::class,
         ]);
     })
     ->withProviders([
+        Mcamara\LaravelLocalization\LaravelLocalizationServiceProvider::class,
         App\Providers\FortifyServiceProvider::class,
     ])
     ->withExceptions(function (Exceptions $exceptions): void {

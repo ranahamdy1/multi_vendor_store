@@ -66,9 +66,9 @@
                                 <div class="select-position">
                                     <form action="{{ URL::current() }}" method="get">
                                         <select name="locale" onchange="this.form.submit()">
-                                            {{-- @foreach (LaravelLocalization::getSupportedLocales() as $localeCode => $properties)
+                                             @foreach (LaravelLocalization::getSupportedLocales() as $localeCode => $properties)
                                                 <option value="{{ $localeCode }}" @selected($localeCode == App::currentLocale())>{{ $properties['native'] }}</option>
-                                            @endforeach --}}
+                                            @endforeach
                                         </select>
                                     </form>
                                 </div>
@@ -260,7 +260,7 @@
                 <div class="nav-inner">
                     <!-- Start Mega Category Menu -->
                     <div class="mega-category-menu">
-                        <span class="cat-button"><i class="lni lni-menu"></i>All Categories</span>
+                        <span class="cat-button"><i class="lni lni-menu"></i>{{trans('allCategory')}}</span>
                         <ul class="sub-category">
                             <li><a href="product-grids.html">Electronics <i class="lni lni-chevron-right"></i></a>
                                 <ul class="inner-sub-category">
