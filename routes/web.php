@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\SocialLoginController;
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Front\Auth\TwoFactorAuthenticationController;
 use App\Http\Controllers\Front\CartController;
@@ -10,6 +11,8 @@ use App\Http\Controllers\Front\ProductsController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
+use Laravel\Socialite\Facades\Socialite;
+
 
 Route::group([
     'prefix' => LaravelLocalization::setLocale(),
@@ -36,6 +39,12 @@ Route::group([
         Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     });
 });
+
+
+Route::get('auth/{provider}/redirect', [SocialLoginController::class, 'redirect'])->name('auth.social.redirect');
+
+Route::get('auth/{provider}/callback', [SocialLoginController::class, 'handleCallback'])->name('auth.social.callback');
+
 
 
 //require __DIR__.'/auth.php';
