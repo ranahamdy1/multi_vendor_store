@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Crypt;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Sanctum\HasApiTokens;
 
@@ -25,6 +26,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'provider',
+        'provider_id',
+        'provider_token'
     ];
 
     /**
@@ -37,7 +41,8 @@ class User extends Authenticatable
         'remember_token',
         'two_factor_recovery_codes',
         'two_factor_secret',
-        'two_factor_confirmed_at'
+        'two_factor_confirmed_at',
+        'provider_token'
     ];
 
     /**
@@ -56,5 +61,15 @@ class User extends Authenticatable
     public function profile()
     {
         return $this->hasOne(Profile::class, 'user_id','id')->withDefault();
+    }
+
+    public function setProviderTokenAttribute($value)
+    {
+        $this->attributes['provider_token'] = Crypt::encryptString($value);
+    }
+
+    public function getProviderTokenAttribute($value)
+    {
+        return Crypt::decryptString($value);
     }
 }
