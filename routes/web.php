@@ -7,6 +7,7 @@ use App\Http\Controllers\Front\CartController;
 use App\Http\Controllers\Front\CheckOutController;
 use App\Http\Controllers\Front\CurrencyConverterController;
 use App\Http\Controllers\Front\HomeController;
+use App\Http\Controllers\Front\PaymentController;
 use App\Http\Controllers\Front\ProductsController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SocialController;
@@ -43,10 +44,14 @@ Route::group([
 
 
 Route::get('auth/{provider}/redirect', [SocialLoginController::class, 'redirect'])->name('auth.social.redirect');
-
 Route::get('auth/{provider}/callback', [SocialLoginController::class, 'handleCallback'])->name('auth.social.callback');
-
 Route::get('auth/{provider}/user', [SocialController::class, 'index'])->name('auth.social.user');
+
+//stripe
+Route::get('orders/{order}/pay', [PaymentController::class, 'create'])->name('orders.pay.create');
+Route::post('orders/{order}/stripe/payment-intent', [PaymentController::class, 'createStripePaymentIntent'])->name('orders.stripe.paymentIntent'); //need it in flutter
+Route::post('orders/{order}/stripe/callback', [PaymentController::class, 'confirm'])->name('orders.stripe.callback');
+Route::get('orders/{order}/success', [PaymentController::class ,'success'])->name('orders.success');
 
 
 

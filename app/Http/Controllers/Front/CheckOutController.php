@@ -16,9 +16,9 @@ class CheckOutController extends Controller
 {
     public function create(CartRepository $cart)
     {
-        if ($cart->get()->count() == 0) {
-            return redirect()->route('home');
-        }
+//        if ($cart->get()->count() == 0) {
+//            return redirect()->route('home');
+//        }
 
         return view('front.checkout', [
             'cart' => $cart,
@@ -38,14 +38,13 @@ class CheckOutController extends Controller
 
         try {
             foreach ($items as $store_id => $cart_items) {
-                // إنشاء الطلب (Order)
                 $order = Order::create([
                     'store_id' => $store_id,
                     'user_id' => Auth::id(),
                     'payment_method' => 'cod',
                 ]);
 
-                // إنشاء تفاصيل الطلب (Order Items)
+                // (Order Items)
                 foreach ($cart_items as $item) {
                     OrderItem::create([
                         'order_id' => $order->id,
@@ -56,7 +55,6 @@ class CheckOutController extends Controller
                     ]);
                 }
 
-                // إضافة العنوان
                 if ($request->has('addr')) {
                     foreach ($request->post('addr') as $type => $address) {
                         $address['type'] = $type;
@@ -64,11 +62,9 @@ class CheckOutController extends Controller
                     }
                 }
 
-                //إرسال الحدث بعد إنشاء كل Order
                 event(new OrderCreated($order));
             }
 
-            // تفريغ السلة
             $cart->empty();
 
             DB::commit();
@@ -78,6 +74,6 @@ class CheckOutController extends Controller
             throw $e;
         }
 
-        return redirect()->route('home')->with('success','Doneee');
+        return redirect()->route('orders.pay.create',$order->id);
     }
 }
